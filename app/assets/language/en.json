@@ -1,0 +1,52 @@
+{
+    "translation":{
+        "login":"LOGIN",
+        "register":"REGISTER",
+        "next":"NEXT",
+        "forgot_password":"FORGOT PASSWORD",
+        "send_mail":"SEND EMAIL",
+        "reset_password":"RESET PASSWORD",
+
+        "gt_get":"GET",
+        "gt_started":"STARTED",
+        "gt_description_one":"Get started and enjoy the awesome local food",
+        "gt_description_two":"right at your home.",
+
+        "onb1_awesome":"AWESOME",
+        "onb1_local":"LOCAL",
+        "onb1_food":"FOOD",
+        "onb1_description_one":"Discover delicious food from the amazing",
+        "onb1_description_two":"restaurants near you",
+        
+        "onb2_delivered":"DELIVERED AT",
+        "onb2_your":"YOUR",
+        "onb2_door":"DOORSTEP",
+        "onb2_description_one":"Fresh and delicious local food delivered from",
+        "onb2_description_two":"the restaurants to your doorstep",
+
+        "onb3_grab":"GRAB THE",
+        "onb3_best":"BEST",
+        "onb3_deals":"DEALS",
+        "onb3_around":"AROUND",
+        "onb3_description_one":"Grab the best deals and discounts around and",
+        "onb3_description_two":"save on your every order",
+        "onb3_getStarted":"GET STARTED",
+
+        "reg_name":"FULL NAME",
+        "reg_email":"EMAIL",
+        "reg_password":"PASSWORD",
+        "reg_phone":"PHONE",
+        "reg_already":"Already have an account?",
+        "reg_login":"Login",
+        "reg_confirm_password":"CONFIRM PASSWORD",
+        "reg_new_password":"NEW PASSWORD",
+
+        "log_account":"Don't have an account?",
+        "log_register":"Register",
+        "log_forgot_password":"Forgot Password",
+
+        "forgp_forgot_password_reset":"We'll send a password reset link to your email."
+
+
+    }
+}
