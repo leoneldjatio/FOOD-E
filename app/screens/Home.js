@@ -1,5 +1,5 @@
-import React,{useRef} from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import React,{useContext, useRef} from 'react';
+import { View, StyleSheet, ScrollView, FlatList } from 'react-native';
 import AppIcon from '../component/AppIcon';
 import AppText from '../component/AppText';
 import Screen from '../component/Screen';
@@ -10,11 +10,19 @@ import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import Card from '../component/Card';
 import Coupon from '../component/Coupon';
 import Logo from '../component/Logo';
+import useAuth from '../auth/useAuth';
+import { Items } from '../database/database';
+import { Inter_500Medium } from '@expo-google-fonts/inter';
 
 
-function Home(props) {
+
+
+function Home({navigation}) {
     const {t} =useTranslation();
     const scrollView = useRef();
+    const {user} = useAuth();
+    const userName = user.name.split(' ');
+   
 
     let [fontsLoaded] = useFonts({
       Poppins_400Regular, BebasNeue_400Regular,
@@ -23,10 +31,11 @@ function Home(props) {
       return null;
     }
   return (
-    <Screen style={{ backgroundColor: colors.light,padding:25}}>
+    <Screen style={{ backgroundColor: colors.light,paddingLeft:25,paddingRight:25,}}>
+      <ScrollView >
         <View style={{flexDirection:"row"}}>
-            <AppText style={styles.title_one} children="Hello,"/>
-            <AppText style={styles.title_two} children=" John"/>
+            <AppText style={styles.title_one} children="Hello, "/>
+            <AppText style={styles.title_two} children={userName[0]}/>
             <AppText style={styles.title_three} children="!"/>
             <AppText style={styles.title_four} children="HOME"/>
             <AppIcon   icon="map-pin" color="secondary"/>
@@ -46,27 +55,24 @@ function Home(props) {
      
      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}> 
       <View style={{flexDirection:"row"}}>
-      <Card 
-      imageUrl={require('../assets/images/achu.jpg')} 
-      likeIcon="heart" 
-      title="Achu" 
-      currency="XAF" 
-      subtitle="1500" 
-      icon="shopping-bag"/>
-      <Card 
-      imageUrl={require('../assets/images/salmon.jpg')} 
-      likeIcon="heart" 
-      title="Grilled Salmon" 
-      currency="XAF" 
-      subtitle="1000" 
-      icon="shopping-bag"/>
-      <Card 
-      imageUrl={require('../assets/images/egg.jpg')} 
-      likeIcon="heart" 
-      title="Egg Salad" 
-      currency="XAF" 
-      subtitle="2500" 
-      icon="shopping-bag"/>
+        <FlatList
+          data={Items}
+          keyExtractor={(item, index) => 'key' + index}
+          horizontal
+          renderItem={({ item }) => {
+            return <Card 
+            imageUrl={item.mealDisplayImage} 
+            likeIcon="heart" 
+            title={item.name} 
+            currency={item.currency} 
+            subtitle={item.mealPrice} 
+            icon="shopping-bag"
+            onPress={()=>navigation.navigate("Food Details",item)}
+            />
+        }}
+        />
+      
+      
       </View>
       </ScrollView> 
      <AppText style={styles.title_six} children="RESTAURANTS"/>
@@ -78,7 +84,7 @@ function Home(props) {
          <Logo imageUrl={require('../assets/images/dominos.png')}/>    
      </View>
      </ScrollView>
-
+     </ScrollView>
     </Screen>
   );
 }
@@ -116,19 +122,21 @@ const styles = StyleSheet.create({
   title_five:{
     fontFamily:"BebasNeue_400Regular",
     fontWeight:"400",
-    fontSize:12,
-    lineHeight:14.4,
+    fontSize:16,
+    lineHeight:17,
     paddingBottom:20,
     
   },
   title_six:{
     fontFamily:"BebasNeue_400Regular",
     fontWeight:"400",
-    fontSize:12,
+    fontSize:16,
     lineHeight:14.4,
+    paddingTop:30,
     paddingBottom:10
     
-  }
+  },
+  
 });
 
 export default Home;

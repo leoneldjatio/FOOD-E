@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet} from 'react-native';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
@@ -11,15 +11,18 @@ import colors from '../config/colors';
 import AppFormCaption from '../component/forms/AppFormCaption';
 import { useTogglePasswordVisibility } from '../Hooks/useTogglePasswordVisibility';
 import KeyBoardAvoidWrapper from '../component/KeyBoardAvoidWrapper';
-import {connect} from 'react-redux';
-import {onUserLogin} from '../redux/actions/actions';
-import {useDispatch} from 'react-redux';
+import useApi from '../api/users';
+import ErrorMessage from '../component/forms/ErrorMessage';
+import { } from 'formik';
+import useAuth from '../auth/useAuth';
 
 
-function _Login({navigation,onUserLogin,userReducer}) {
-    
-    const {passwordVisibility,rightIcon,handlePasswordVisibility}=useTogglePasswordVisibility();
-    const dispatch = useDispatch();
+function Login({navigation,route}) {
+  const [loginFailed,setLoginFailed]=useState(false);
+  const [error, setError]=useState();
+  const {logIn} = useAuth();   
+  const {passwordVisibility,rightIcon,handlePasswordVisibility}=useTogglePasswordVisibility();
+ 
 
       const validationSchema=Yup
       .object()
@@ -41,13 +44,22 @@ function _Login({navigation,onUserLogin,userReducer}) {
        .required()
        .label('Password')
       });
-   
-      const {t} =useTranslation();
       
-      const handleSubmit = (values)=>{ 
-        dispatch(onUserLogin(values.email,values.password));
+      const handleSubmit = async (values)=>{ 
+        const result = await useApi.login(values);
+         if (!result.ok){
+          setError(result.data.message);
+          return setLoginFailed(true);
+        
+         }else{
+         setLoginFailed(false);
+         logIn(result.data);
+        
+        
+         }
        }
-      
+     
+const {t} =useTranslation();
     return (
     
       <>
@@ -56,13 +68,12 @@ function _Login({navigation,onUserLogin,userReducer}) {
          <KeyBoardAvoidWrapper>
       <View style={{justifyContent:"flex-end",flex:1}}>   
        <AppForm  
-          initialValues={{email:"",password:""}}
+          enableReinitialize={true}
+          initialValues={{email:route?.params?.email,password:""}}
           onSubmit={handleSubmit}
           validationSchema ={validationSchema}
        >
-        
-           
-  
+        <ErrorMessage visible={loginFailed} error={error}/>
             <AppFormField
               autoCapitalize="none"
               autoCorrect={false}
@@ -107,12 +118,6 @@ function _Login({navigation,onUserLogin,userReducer}) {
     container: {}
   });
 
-  const mapStateToProps =(state)=>({ 
-  userReducer:state.userReducer,
-  });
-  
-  const Login = connect(mapStateToProps,{onUserLogin})(
-   _Login
-  );
+ 
 
 export default Login;

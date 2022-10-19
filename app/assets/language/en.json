@@ -40,12 +40,40 @@
         "reg_login":"Login",
         "reg_confirm_password":"CONFIRM PASSWORD",
         "reg_new_password":"NEW PASSWORD",
+        
 
         "log_account":"Don't have an account?",
         "log_register":"Register",
         "log_forgot_password":"Forgot Password",
 
-        "forgp_forgot_password_reset":"We'll send a password reset link to your email."
+        "forgp_forgot_password_reset":"We'll send a password reset code to your email.",
+
+        "email_sent":"EMAIL SENT",
+        "did_not_receive_email":"Did not receive the email yet?",
+
+        "resend_verification":"PROCEED",
+        "resend":"Resend",
+        "resend_verified":"Email has already been verified, please proceed to login.",
+
+        "pass_reset_code":"Password Reset Code",
+
+        "account_and_profile":"ACCOUNT AND PROFILE",
+
+        "change_password":"CHANGE PASSWORD",
+        "change_old_password":"Old Password",
+
+        "food_description":"DESCRIPTION",
+        "food_detail_description":"Non odit iusto delectus maxime sit placeat voluptatum dolorem. Dolores quos rerum iusto. Beatae totam ab veritatis aliquid tenetur qui ut.Quia ut dolorum enim et. Exercitationem occaecati eum est ex qui harum aliquam.",
+        "food_details_quantity":"QUANTITY",
+        "food_details_add_to_basket":"ADD TO BASKET",
+        "food_details_subtotal":"SUB TOTAL",
+
+        "basket":"BASKET",
+        "proceed_to_checkout":"PROCEED TO CHECKOUT"
+
+
+
+       
 
 
     }

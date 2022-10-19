@@ -1,20 +1,33 @@
 import React from 'react';
 import { View, StyleSheet,TouchableOpacity,Text } from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from '../screens/Home';
 import Feather from '@expo/vector-icons/Feather';
 import colors from '../config/colors';
+import AccountNavigation from './AccountNavigation';
+import Home from '../screens/Home';
+import HomeNavigation from './HomeNavigation';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import Checkout from '../screens/Checkout';
+
 
 
 function AppNavigator() {
     const Tab = createBottomTabNavigator();
+
+    const getRouteName=(route)=>{
+      const routeName=getFocusedRouteNameFromRoute(route);
+      if(routeName?.includes('Food Details')){
+        return 'none';
+      }
+      return 'flex';
+    }
   return (
     <Tab.Navigator screenOptions={{
   tabBarShowLabel:false,
   tabBarActiveTintColor:colors.primary,
   tabBarInactiveTintColor:colors.dark,
   tabBarStyle:{
-    backgroundColor:colors.light,
+    backgroundColor:colors.white,
     borderTopWidth:0,
     
     
@@ -23,9 +36,10 @@ function AppNavigator() {
   
     }}>
         <Tab.Screen
-         name={"Home"}
-         component={Home}
-         options={({navigation})=>({
+         name={"My Home"}
+         component={HomeNavigation}
+         options={({navigation,route})=>({
+          tabBarStyle:{display:getRouteName(route)},
           headerShown:false,
              tabBarIcon:({size,focused,color})=>
              <View>
@@ -55,14 +69,19 @@ function AppNavigator() {
         />
          <Tab.Screen
          name={"Checkout"}
-         component={Home}
-         options={({navigation})=>({
+         component={Checkout}
+         options={{
           headerShown:false,
-             tabBarIcon:({size,color})=>
-             <Feather size={size} name="shopping-bag" color={colors.dark}/>
-            
-             
-         })}
+           tabBarIcon:({size,focused,color})=>
+           <View>
+           <View style={{}}>
+           <Feather size={size} name="shopping-bag" color={color}  focused={focused}/>
+           {focused && <Text focused={focused} style={{alignSelf:"center", color:colors.primary,bottom:0,marginBottom:-17}}>_</Text>}
+           </View>
+           
+           </View>
+           
+       }}
 
         />
          <Tab.Screen
@@ -78,15 +97,20 @@ function AppNavigator() {
 
         />
          <Tab.Screen
-         name={"Account"}
-         component={Home}
-         options={({navigation})=>({
+         name={"My Account"}
+         component={AccountNavigation}
+         options={{
             headerShown:false,
-             tabBarIcon:({size,color})=>
-             <Feather size={size} name="user" color={colors.dark}/>
-            
+             tabBarIcon:({size,focused,color})=>
+             <View>
+             <View style={{}}>
+             <Feather size={size} name="user" color={color}  focused={focused}/>
+             {focused && <Text focused={focused} style={{alignSelf:"center", color:colors.primary,bottom:0,marginBottom:-17}}>_</Text>}
+             </View>
              
-         })}
+             </View>
+             
+         }}
 
         />
 

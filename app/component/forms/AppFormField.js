@@ -24,6 +24,7 @@ function AppFormField({name,width,label,...otherProps}) {
      width={width}
      onBlur={()=>setFieldTouched(name)}
      value ={values[name]}
+     onChange={handleChange(name)}
      {...otherProps}
      error={errors[name]}
      visible={touched[name]}

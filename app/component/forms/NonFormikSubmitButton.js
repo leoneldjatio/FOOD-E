@@ -1,14 +1,12 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import AppButton from '../AppButton';
-import {useFormikContext} from 'formik';
 import colors from '../../config/colors';
 
-function SubmitButton({submitLabel,style}) {
-    const {handleSubmit} = useFormikContext();
+function NonFormikSubmitButton({submitLabel,style,onPress}) {
   return (
     <View style={styles.container}>
-        <AppButton style={[styles.button,style]} title={submitLabel} onPress={handleSubmit} backColor="primary" textColor="white"/>
+        <AppButton style={[styles.button,style]} title={submitLabel} onPress={onPress} backColor="primary" textColor="white"/>
     </View>
   );
 }
@@ -23,4 +21,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SubmitButton;
+export default NonFormikSubmitButton;

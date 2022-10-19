@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useState}from 'react';
 import { View, StyleSheet,ScrollView,TouchableWithoutFeedback,Keyboard,KeyboardAvoidingView } from 'react-native';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,13 @@ import colors from '../config/colors';
 import AppFormCaption from '../component/forms/AppFormCaption';
 import { useTogglePasswordVisibility } from '../Hooks/useTogglePasswordVisibility';
 import KeyBoardAvoidWrapper from '../component/KeyBoardAvoidWrapper';
+import userApi from '../api/users/';
+import ErrorMessage from '../component/forms/ErrorMessage';
+import ActivityIndicator from '../component/ActivityIndicator';
+
+
+
+
 
 
 
@@ -45,23 +52,55 @@ function Register({navigation}) {
      .required()
      .label('Password')
     });
+    
+    const [error,setError] = useState();
+    const [isLoading,setIsLoading] = useState(false);
+    const [message, setMessage]= useState();
+    const handleSubmit= async (values)=>{
+       setIsLoading(true);
+        const result = await userApi.register(values);
+        setIsLoading(false); 
+        console.log(result);
+       const email= result.data.email;
+       const userId = result.data.id._id;
+       const name= result.data.name;
+        if(result.data.status !=='PENDING'){
+          if(!result.ok){
+            if(result.data) {setMessage(result.data.message);}
+            else{
+              setMessage("An unexpected error occurred"); 
+            }
+            return;   
+          }else{
+            setMessage(result.data.message);
+          }
+        }else{
+      navigation.navigate('resend email verification',{email,userId,name});
+        }
+        
+        
+
+       
+     
+    }
 
     const {t} =useTranslation();
   return (
   
     <>
+     <ActivityIndicator visible={isLoading}/>
     <Screen style={{padding:25,backgroundColor:colors.white}}>
-      
+   
        <AppFormCaption style={{flex:1}} caption={t('register')}/>
-       
        <KeyBoardAvoidWrapper>
     <View style={{justifyContent:"flex-end",flex:1}}>   
-     <AppForm  
-        initialValues={{name:"",email:"",phone:"",password:""}}
-        onSubmit={(values)=>console.log(values)}
+     <AppForm 
+        enableReinitialize={true} 
+        initialValues={{name:"LEO",email:"",phone:"",password:""}}
+        onSubmit={handleSubmit}
         validationSchema ={validationSchema}
      >
-      
+      <ErrorMessage visible={setMessage} error={message}/>
          <AppFormField
             autoCapitalize="none"
             autoCorrect={false}

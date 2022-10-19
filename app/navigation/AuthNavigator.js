@@ -9,6 +9,8 @@ import Register from '../screens/Register';
 import ForgotPassword from '../screens/ForgotPassword';
 import colors from '../config/colors';
 import Feather from '@expo/vector-icons/Feather';
+import ResendEmailVerification from '../screens/ResendEmailVerification';
+import ResetPassword from '../screens/ResetPassword';
 
 const Stack = createStackNavigator();
 
@@ -63,7 +65,22 @@ const AuthNavigator=() => (
         headerShadowVisible:false,
         headerTitle: "",
         headerBackImage:()=><Feather name="x" style={{paddingLeft:20}} size={25} color={colors.dark}/>}}
-       />  
+       /> 
+        <Stack.Screen 
+       name="reset password"
+       component={ResetPassword}
+       options={{headerShown:true,
+        headerTintColor:colors.primary_dark,
+        headerBackTitleVisible: false,
+        headerShadowVisible:false,
+        headerTitle: "",
+        headerBackImage:()=><Feather name="x" style={{paddingLeft:20}} size={25} color={colors.dark}/>}}
+       /> 
+       <Stack.Screen 
+       name="resend email verification"
+       component={ResendEmailVerification}
+       options={{headerShown:false}}
+       /> 
     </Stack.Navigator>
   );
 

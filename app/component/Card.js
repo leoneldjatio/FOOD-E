@@ -4,6 +4,8 @@ import Feather from '@expo/vector-icons/Feather';
 import colors from '../config/colors';
 import { useFonts, Poppins_400Regular } from '@expo-google-fonts/poppins';
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
+import TextTicker from 'react-native-text-ticker';
+import {BlurView} from 'expo-blur'
 
 
 
@@ -20,12 +22,21 @@ function Card({ onPress, imageUrl, title, subtitle, icon, iconColor, likeIcon, l
             <View style={styles.card}>
                     <Image source={imageUrl} style={styles.Image} />
 
-                <View style={styles.likeIconBackground}>
+                <BlurView intensity={20} style={styles.likeIconBackground}>
                     <Feather name={likeIcon} size={20} color={colors[likeIconColor]} style={styles.likeIcon} onPress={likeIconPress} />
-                </View>
-
-                <Text style={styles.title}>{title}</Text>
-                <View style={{ flex: 0, flexDirection: "row", paddingTop: 5, paddingBottom: 10, paddingLeft: 5, paddingRight: 5, marginRight: 5 }}>
+                </BlurView>
+                <TextTicker
+                duration={3000}
+                loop
+                bounce
+                repeatSpacer={50}
+                marqueeDelay={1000}
+                numberOfLines={1} 
+                style={styles.title}
+                >
+                  {title}
+                    </TextTicker>  
+                <View style={{ flex: 0, flexDirection: "row", paddingTop: 5, paddingBottom: 10, paddingLeft: 5, paddingRight: 5, marginRight: 5 }}>  
                 <Text style={styles.subtitle}>{subtitle}</Text>
                     <Text style={styles.currency}>{currency}</Text>
                     <View style={{ backgroundColor: colors.primary, borderRadius: 5, marginRight: 1 }}>
@@ -100,6 +111,7 @@ const styles = StyleSheet.create({
         padding: 13,
         borderRadius: 5,
         backgroundColor: "rgba(255, 255, 255, 0.2)",
+        overflow:"hidden"
 
     },
     currency: {

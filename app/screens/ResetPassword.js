@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, StyleSheet} from 'react-native';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
@@ -6,13 +6,20 @@ import AppForm from '../component/forms/AppForm';
 import Screen from '../component/Screen';
 import AppFormField from '../component/forms/AppFormField';
 import SubmitButton from '../component/forms/SubmitButton';
-import AppText from '../component/AppText';
 import colors from '../config/colors';
 import AppFormCaption from '../component/forms/AppFormCaption';
+import userApi from '../api/users';
 import { useTogglePasswordVisibility } from '../Hooks/useTogglePasswordVisibility';
 import KeyBoardAvoidWrapper from '../component/KeyBoardAvoidWrapper';
+import ActivityIndicator from '../component/ActivityIndicator';
+import { use } from 'i18next';
+import ErrorMessage from '../component/forms/ErrorMessage';
 
-function ResetPassword(props) {
+function ResetPassword({navigation}) {
+    const [isLoading,setIsLoading] = useState(false);
+    const [error,setError]=useState();
+    const[resetPasswordFailed, setResetPasswordFailed] = useState(false);
+    const {t} =useTranslation();
     const {passwordVisibility,rightIcon,handlePasswordVisibility}=useTogglePasswordVisibility();
     const validationSchema=Yup
     .object()
@@ -33,23 +40,41 @@ function ResetPassword(props) {
     .oneOf([Yup.ref('password')], 'Passwords do not match')
     .required('Confirm password is required'),
 
+    passwordResetCode: Yup
+    .string()
+    .min(8, ({min})=> `Password reset code is at least ${min} characters`)
+    .required('Password reset code is required')
     });
 
-    const {t} =useTranslation();
+    const handleSubmit=async (values)=>{
+         setIsLoading(true);
+       const result = await userApi.resetPassword(values);
+         setIsLoading(false);
+         if(!result.ok){
+          setError(result.data.message);
+          return setResetPasswordFailed(true);
+         }else{
+          setResetPasswordFailed(false);
+          navigation.navigate('login');
+         }
+
+    }
+    
   return (
   
     <>
-    <Screen style={{padding:25}}>
-       <AppFormCaption caption={t('reset_password')}/>
+    <ActivityIndicator visible={isLoading}/>
+    <Screen style={{padding:25,backgroundColor:colors.white}}>
+       <AppFormCaption  caption={t('reset_password')}/>
        <KeyBoardAvoidWrapper>
-    <View style={{justifyContent:"flex-end",flex:1,marginTop:100}}>   
+    <View style={{justifyContent:"flex-end",flex:1,marginTop:80}}>   
      <AppForm  
-        initialValues={{password:"",confirmPassword:""}}
-        onSubmit={(values)=>console.log(values)}
+        initialValues={{password:"",confirmPassword:"", passwordResetCode:""}}
+        onSubmit={handleSubmit}
         validationSchema ={validationSchema}
      >
       
-
+    <ErrorMessage visible={resetPasswordFailed} error={error}/>
         <AppFormField
          autoCapitalize="none"
          autoCorrect={false}  
@@ -74,8 +99,17 @@ function ResetPassword(props) {
           label={t('reg_confirm_password')}
           placeholder="Confirm Password"/>
 
+           <AppFormField
+            autoCapitalize="none"
+            autoCorrect={false}
+              keyboardType="default"
+              textContentType="none"
+              name="passwordResetCode" 
+              label={t('pass_reset_code')}
+              placeholder="Password Reset Code"/>
+
       
-         <SubmitButton submitLabel={t('reset_password')}/>
+         <SubmitButton  submitLabel={t('reset_password')}/>
         
     </AppForm>
      </View>
